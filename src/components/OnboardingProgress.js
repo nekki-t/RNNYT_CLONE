@@ -47,7 +47,7 @@ const OnboardingProgress = ({ totalItems, pan }) => (
 
 OnboardingProgress.propTypes = {
   totalItems: PropTypes.number.isRequired,
-  pan: PropTypes.instanceOf(Animated.value)
+  pan: PropTypes.instanceOf(Animated.Value)
 };
 
 const styles = StyleSheet.create({

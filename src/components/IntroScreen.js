@@ -16,9 +16,9 @@ const IntroScreen = (({ push }) => (
     <TouchableOpacity
       onPress={() => push('onboarding')}
     >
-      <Title>React Native News Reader</Title>
+      <Title>NcManager Version 2</Title>
       <AppText>
-        Start Reading
+        初期設定を開始します。
       </AppText>
     </TouchableOpacity>
   </View>

@@ -11,10 +11,10 @@ const placeholderImage = 'https://placeholdit.imgix.net/' +
   '&w=350&h=350&txttrack=0&txt=Placeholder+Image+';
 
 const content = [
-  'Welcome to RNNYT!',
-  'With this app, you can learn all about the news!',
-  'And you get to experiment with React Native!',
-  'And aren\'t animations fun?!'
+  '初期設定を始めます。',
+  '管理者情報を入力してください。',
+  '店舗情報を入力してください。',
+  'ログイン情報を入力してください。'
 ];
 
 export default content.map((message, i) => ({

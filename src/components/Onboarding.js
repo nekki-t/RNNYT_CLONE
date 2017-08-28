@@ -42,24 +42,125 @@ export default class Onboarding extends Component {
       onPanResponderGrant: () => {
         this.state.pan.setOffset(this.dragPosition);
         this.state.pan.setValue(0);
+      },
+      onPanResponderMove: (e, gestureState) => {
+        this.state.pan.setValue(gestureState.dx);
+      },
+      onPanResponderRelease: (e) => {
+        console.log(DEVICE_WIDTH);
+        console.log(onboardingContent.length);
+
+        const movedLeft = e.nativeEvent.pageX < (DEVICE_WIDTH / 2);
+        let updateState = false;
+
+        let toValue = movedLeft
+          ? DEVICE_WIDTH * (this.state.currentIndex + 1) * -1
+          : DEVICE_WIDTH * (this.state.currentIndex - 1) * -1;
+
+        if (toValue > 0) {
+          toValue = 0;
+        } else if (toValue < ((DEVICE_WIDTH * onboardingContent.length) - DEVICE_WIDTH) * -1) {
+          toValue = ((DEVICE_WIDTH * onboardingContent.length) - DEVICE_WIDTH) * -1;
+        } else {
+          updateState = true;
+        }
+
+        this.state.pan.flattenOffset();
+
+        if (updateState) {
+          this.transitionToNextPanel(movedLeft
+            ? this.state.currentIndex + 1
+            : this.state.currentIndex - 1);
+        } else {
+          Animated.spring(this.state.pan, {
+            velocity: 0.5,
+            tensions: 0.2,
+            friction: 2,
+            toValue
+          }).start();
+        }
       }
     });
   }
 
-  moveNext() {
+  componentWillUnmount() {
+    this.state.pan.removeListener(this.panListener);
   }
+
   movePrevious() {
+    this.transitionToNextPanel(this.state.currentIndex - 1);
   }
-  transitionToNextPanel() {
+
+  moveNext() {
+    this.transitionToNextPanel(this.state.currentIndex + 1);
   }
+
+  transitionToNextPanel(nextIndex) {
+    Animated.timing(this.state.pan, {
+      toValue: nextIndex * DEVICE_WIDTH * -1,
+      duration: 300
+    }).start(() => {
+      this.setState({
+        currentIndex: nextIndex
+      });
+    });
+  }
+
   moveFinal() {
+    LayoutAnimation.configureNext({
+      duration: 1250,
+      update: {
+        springDamping: 0.4,
+        type: LayoutAnimation.Types.spring
+      }
+    });
+    this.setState({ isDone: true });
+    setTimeout(() => {
+      this.props.push('home');
+    }, 1000);
   }
+
   render() {
     return (
-      <View>
-        <Text>
-          Hello
-        </Text>
+      <View style={styles.container}>
+        <CollapsibleView
+          style={[
+            styles.container,
+            { backgroundColor: onboardingContent[this.state.currentIndex].backgroundColor }
+          ]}
+          hide={this.state.isDone}
+        >
+          <Animated.View
+            {...this.panResponder.panHandlers}
+            style={[
+              styles.panelContainer,
+              { width: DEVICE_WIDTH * onboardingContent.length },
+              {
+                transform: [{
+                  translateX: this.state.pan
+                }]
+              }
+            ]}
+          >
+            {onboardingContent.map((panel, i) => (
+              <OnboardingPanel key={i} {...panel} />
+            ))}
+          </Animated.View>
+          <OnboardingProgress
+            totalItems={onboardingContent.length}
+            pan={this.state.pan}
+          />
+          <OnboardingButtons
+            totalItems={onboardingContent.length}
+            currentIndex={this.state.currentIndex}
+            movePrevious={this.movePrevious}
+            moveNext={this.moveNext}
+            moveFinal={this.moveFinal}
+          />
+        </CollapsibleView>
+        <CollapsibleView hide={!this.state.isDone} style={styles.doneContainer}>
+          <AppText style={styles.doneText} >初期設定を完了しました。</AppText>
+        </CollapsibleView>
       </View>
     );
   }

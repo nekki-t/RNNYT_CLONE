@@ -37,7 +37,7 @@ const OnboardingButtons = ({
 );
 
 OnboardingButtons.propTypes = {
-  totalItems: PropTypes.number.isRequred,
+  totalItems: PropTypes.number.isRequired,
   currentIndex: PropTypes.number.isRequired,
   movePrevious: PropTypes.func.isRequired,
   moveNext: PropTypes.func.isRequired,
