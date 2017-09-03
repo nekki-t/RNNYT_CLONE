@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ActionSheetIOS
 } from 'react-native';
-import Byline from '/Byline';
+import Byline from './Byline';
 import AppText from './AppText';
 import Thumbnail from './Thumbnail';
 import * as globalStyles from '../styles/global';
@@ -20,7 +20,7 @@ export default class NewsItem extends Component {
     ActionSheetIOS.showActionSheetWithOptions({
       options: ['Bookmark', 'Cancel'],
       cancelButtonIndex: 1,
-      title: this.prop.title
+      title: this.props.title
     }, (buttonIndex) => {
       if (buttonIndex === 0) {
         this.props.onBookmark();

@@ -5,7 +5,9 @@ import {
   TabBarIOS,
   StatusBar
 } from 'react-native';
-
+import NewsFeedContainer from '../containers/NewsFeedContainer';
+import SearchContainer from '../containers/SearchContainer';
+import BookmarkContainer from '../containers/BookmarksContainer';
 import * as globalStyles from '../styles/global';
 
 StatusBar.setBarStyle('light-content');
@@ -22,33 +24,21 @@ const HomeScreen = ({ selectedTab, tab }) => (
       selected={selectedTab === 'newsFeed'}
       onPress={() => tab('newsFeed')}
     >
-      <View>
-        <Text>
-          newsFeed
-        </Text>
-      </View>
+      <NewsFeedContainer />
     </TabBarIOS.Item>
     <TabBarIOS.Item
       systemIcon={'search'}
       selected={selectedTab === 'search'}
       onPress={() => tab('search')}
     >
-      <View>
-        <Text>
-          search
-        </Text>
-      </View>
+      <SearchContainer />
     </TabBarIOS.Item>
     <TabBarIOS.Item
       systemIcon={'bookmarks'}
       selected={selectedTab === 'bookmarks'}
       onPress={() => tab('bookmarks')}
     >
-      <View>
-        <Text>
-          bookmarks
-        </Text>
-      </View>
+      <BookmarkContainer />
     </TabBarIOS.Item>
   </TabBarIOS>
 );
